@@ -59,5 +59,17 @@ fun Route.taskRoutes() {
                 call.respond(HttpStatusCode.BadRequest)
             }
         }
+        delete("/{taskName}") {
+            val taskName = call.parameters["taskName"]
+            if (taskName == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+            if (TaskRepository.removeTask(taskName)) {
+                call.respond(HttpStatusCode.NoContent)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
     }
 }
